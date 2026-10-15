@@ -1417,7 +1417,7 @@
             document.getElementById('modalCurrencyPrefix').textContent = appState.currency;
             document.getElementById('txAmountInput').value = '';
             document.getElementById('txNoteInput').value = '';
-            document.getElementById('txTarikhInput').value = new Tarikh().toISOString().split('T')[0];
+            document.getElementById('txTarikhInput').value = new Date().toISOString().split('T')[0];
 
             renderCategoryGrid();
             selectPaymentMethod('CASH');
@@ -1479,10 +1479,10 @@
             }
 
             const noteVal = document.getElementById('txNoteInput').value.trim();
-            const dateVal = document.getElementById('txTarikhInput').value || new Tarikh().toISOString().split('T')[0];
+            const dateVal = document.getElementById('txTarikhInput').value || new Date().toISOString().split('T')[0];
 
             appState.transactions.push({
-                id: 'tx-' + Tarikh.now(),
+                id: 'tx-' + Date.now(),
                 date: dateVal,
                 type: appState.currentModalType,
                 categoryId: appState.selectedCategoryId,
@@ -1644,7 +1644,7 @@
                     body: JSON.stringify(payload)
                 });
 
-                const now = new Tarikh();
+                const now = new Date();
                 appState.lastSyncedAt = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 updateGoogleSheetStatusUI();
 
@@ -1688,7 +1688,7 @@
                     if (typeof data.closingStockValue !== 'undefined') {
                         appState.closingStockValue = Number(data.closingStockValue) || 0;
                     }
-                    const now = new Tarikh();
+                    const now = new Date();
                     appState.lastSyncedAt = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     renderAll();
                     closeSheetsModal();
@@ -1818,7 +1818,7 @@ function doGet(e) {
   var rows = txSheet.getRange(2, 1, txSheet.getLastRow() - 1, 8).getValues();
   var transactions = rows.map(function(r) {
     return {
-      date: Utiliti.formatTarikh(new Tarikh(r[0]), Session.getScriptTimeZone(), 'yyyy-MM-dd'),
+      date: Utilities.formatDate(new Date(r[0]), Session.getScriptTimeZone(), 'yyyy-MM-dd'),
       type: String(r[1]).indexOf('In') !== -1 ? 'IN' : 'OUT',
       method: r[3],
       amount: Number(r[4]) || 0,
