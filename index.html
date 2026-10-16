@@ -533,7 +533,7 @@
                             </div>
                             <div class="border-y-2 border-slate-900 py-2 px-3 flex justify-between items-center bg-slate-50 rounded-xl mt-3">
                                 <span class="font-extrabold text-xs text-slate-950">JUMLAH LIABILITI DAN EKUITI PEMILIK</span>
-                                <span id="bsTotalEquityFooter" class="font-extrabold text-sm text-slate-950">RM 0.00</span>
+                                <span id="bsTotalLiabilitiesAndEquity" class="font-extrabold text-sm text-slate-950">RM 0.00</span>
                             </div>
                         </div>
 
@@ -3193,112 +3193,149 @@ function doGet(e) {
             }
         }
 
-        async function downloadYearEndPDF() {
-            const btn = document.getElementById('downloadPdfBtn');
-            const originalHTML = btn ? btn.innerHTML : '';
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-emerald-700"></i> <span>Menjana...</span>';
+async function downloadYearEndPDF() {
+    const btn = document.getElementById('downloadPdfBtn');
+    const originalHTML = btn ? btn.innerHTML : '';
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-emerald-700"></i> <span>Menjana...</span>';
+    }
+
+    showToast('Menyediakan dokumen PDF Penyata Kewangan anda...', 'fa-file-pdf text-emerald-400');
+
+    try {
+        // Kira semula penyata untuk memastikan angka terkini diperoleh
+        const stats = computeFinancialStatements(appState.financialYear);
+
+        const pnlEl = document.getElementById('statement-pnl');
+        const bsEl = document.getElementById('statement-bs');
+        const wasPnlHidden = pnlEl.classList.contains('hidden');
+        const wasBsHidden = bsEl.classList.contains('hidden');
+
+        pnlEl.classList.remove('hidden');
+        bsEl.classList.remove('hidden');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.margin = '0';
+        wrapper.style.padding = '0';
+        wrapper.style.backgroundColor = '#ffffff';
+        wrapper.style.fontFamily = 'Inter, sans-serif';
+
+        // --- 1. KLONA PENYATA UNTUNG RUGI ---
+        const pnlClone = pnlEl.cloneNode(true);
+        pnlClone.querySelectorAll('.no-print').forEach(el => el.remove());
+        pnlClone.style.margin = '0';
+        pnlClone.style.padding = '0px';
+        pnlClone.style.border = 'none';
+
+        // Ganti stail kotak Untung Bersih KHAS untuk PDF:
+        const pdfFinalBanner = pnlClone.querySelector('#pnlFinalBanner');
+        if (pdfFinalBanner) {
+            // Samakan bentuk dan border dengan Jumlah Aset (border atas & bawah 2px gelap, latar kelabu cair)
+            pdfFinalBanner.style.backgroundColor = '#f8fafc';
+            pdfFinalBanner.style.borderTop = '2px solid #0f172a';
+            pdfFinalBanner.style.borderBottom = '2px solid #0f172a';
+            pdfFinalBanner.style.borderLeft = 'none';
+            pdfFinalBanner.style.borderRight = 'none';
+            pdfFinalBanner.style.borderRadius = '0.75rem';
+            pdfFinalBanner.style.padding = '0.5rem 0.75rem';
+            pdfFinalBanner.style.boxShadow = 'none';
+            pdfFinalBanner.style.color = '#0f172a';
+
+            // Tajuk / Label (Bold & Hitam Gelap)
+            const label = pdfFinalBanner.querySelector('#pnlFinalLabel');
+            if (label) {
+                label.style.color = '#0f172a';
+                label.style.fontWeight = '800';
+                label.style.fontSize = '12px';
             }
 
-            showToast('Menyediakan dokumen PDF Penyata Kewangan anda...', 'fa-file-pdf text-emerald-400');
+            // Sub-teks penerangan di bawah label
+            const subLabel = pdfFinalBanner.querySelector('span:not(#pnlFinalLabel):not(#pnlNetProfit)');
+            if (subLabel) {
+                subLabel.style.color = '#475569';
+                subLabel.style.fontSize = '11px';
+                subLabel.style.fontWeight = '500';
+            }
 
-            try {
-                const pnlEl = document.getElementById('statement-pnl');
-                const bsEl = document.getElementById('statement-bs');
-                const wasPnlHidden = pnlEl.classList.contains('hidden');
-                const wasBsHidden = bsEl.classList.contains('hidden');
-
-                pnlEl.classList.remove('hidden');
-                bsEl.classList.remove('hidden');
-
-                const wrapper = document.createElement('div');
-                wrapper.style.margin = '0';
-                wrapper.style.padding = '0';
-                wrapper.style.backgroundColor = '#ffffff';
-                wrapper.style.fontFamily = 'Inter, sans-serif';
-
-                const pnlClone = pnlEl.cloneNode(true);
-                pnlClone.querySelectorAll('.no-print').forEach(el => el.remove());
-                pnlClone.style.margin = '0';
-                pnlClone.style.padding = '0px';
-                pnlClone.style.border = 'none';
-
-                // --- MODIFIKASI KHUSUS PDF: Hapus warna hijau dan samakan border dengan Jumlah Aset ---
-const pdfFinalBanner = pnlClone.querySelector('#pnlFinalBanner');
-if (pdfFinalBanner) {
-    pdfFinalBanner.className = 'border-y-2 border-slate-900 py-2 px-3 flex justify-between items-center bg-slate-50 rounded-xl';
-    
-    const label = pdfFinalBanner.querySelector('#pnlFinalLabel');
-    if (label) label.className = 'font-extrabold text-xs text-slate-950 block';
-    
-    const subLabel = pdfFinalBanner.querySelector('span.text-xs');
-    if (subLabel) subLabel.className = 'text-[11px] text-slate-500';
-    
-    const netProfit = pdfFinalBanner.querySelector('#pnlNetProfit');
-    if (netProfit) netProfit.className = 'font-extrabold text-sm text-slate-950';
-}
-// ----------------------------------------------------------------------------------
-
-                const bsClone = bsEl.cloneNode(true);
-                bsClone.querySelectorAll('.no-print').forEach(el => el.remove());
-                bsClone.style.margin = '0';
-                bsClone.style.padding = '0px';
-                bsClone.style.border = 'none';
-                bsClone.style.pageBreakBefore = 'always';
-
-                wrapper.appendChild(pnlClone);
-                wrapper.appendChild(bsClone);
-
-                if (wasPnlHidden) pnlEl.classList.add('hidden');
-                if (wasBsHidden) bsEl.classList.add('hidden');
-
-                const safeBizName = (appState.businessName || 'Perniagaan').replace(/[^a-z0-9]/gi, '_');
-                const filename = `${safeBizName}_Penyata_Kewangan_${appState.financialYear}.pdf`;
-
-                if (typeof html2pdf !== 'undefined') {
-                    const pdfBlob = await html2pdf()
-                        .set({
-                            margin: [4, 8, 8, 8],
-                            filename: filename,
-                            image: { type: 'jpeg', quality: 0.98 },
-                            html2canvas: { 
-                                scale: 2, 
-                                useCORS: true, 
-                                scrollY: 0, 
-                                scrollX: 0 
-                            },
-                            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                        })
-                        .from(wrapper)
-                        .output('blob');
-
-                    const blobUrl = URL.createObjectURL(pdfBlob);
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = blobUrl;
-                    downloadLink.download = filename;
-                    document.body.appendChild(downloadLink);
-                    downloadLink.click();
-                    
-                    setTimeout(() => {
-                        document.body.removeChild(downloadLink);
-                        URL.revokeObjectURL(blobUrl);
-                    }, 1000);
-
-                    showToast('Fail PDF Penyata Kewangan berjaya dimuat turun!');
-                } else {
-                    window.print();
-                }
-            } catch (err) {
-                console.error(err);
-                window.print();
-            } finally {
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = originalHTML;
-                }
+            // Jumlah Wang Untung Bersih (Bold & Hitam Gelap)
+            const netProfit = pdfFinalBanner.querySelector('#pnlNetProfit');
+            if (netProfit) {
+                netProfit.style.color = '#0f172a';
+                netProfit.style.fontWeight = '800';
+                netProfit.style.fontSize = '14px';
+                netProfit.textContent = formatMoney(stats.netProfit);
             }
         }
+
+        // --- 2. KLONA KUNCI KIRA-KIRA ---
+        const bsClone = bsEl.cloneNode(true);
+        bsClone.querySelectorAll('.no-print').forEach(el => el.remove());
+        bsClone.style.margin = '0';
+        bsClone.style.padding = '0px';
+        bsClone.style.border = 'none';
+        bsClone.style.pageBreakBefore = 'always';
+
+        // Pastikan jumlah liabiliti & ekuiti pemilik tidak sifar di dalam PDF
+        const targetTotalEl = bsClone.querySelector('#bsTotalLiabilitiesAndEquity') || bsClone.querySelector('#bsTotalEquityFooter');
+        if (targetTotalEl) {
+            targetTotalEl.textContent = formatMoney(stats.totalLiabilitiesAndEquity);
+            targetTotalEl.style.color = '#0f172a';
+            targetTotalEl.style.fontWeight = '800';
+        }
+
+        wrapper.appendChild(pnlClone);
+        wrapper.appendChild(bsClone);
+
+        if (wasPnlHidden) pnlEl.classList.add('hidden');
+        if (wasBsHidden) bsEl.classList.add('hidden');
+
+        const safeBizName = (appState.businessName || 'Perniagaan').replace(/[^a-z0-9]/gi, '_');
+        const filename = `${safeBizName}_Penyata_Kewangan_${appState.financialYear}.pdf`;
+
+        if (typeof html2pdf !== 'undefined') {
+            const pdfBlob = await html2pdf()
+                .set({
+                    margin: [4, 8, 8, 8],
+                    filename: filename,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { 
+                        scale: 2, 
+                        useCORS: true, 
+                        scrollY: 0, 
+                        scrollX: 0 
+                    },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                })
+                .from(wrapper)
+                .output('blob');
+
+            const blobUrl = URL.createObjectURL(pdfBlob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = blobUrl;
+            downloadLink.download = filename;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            
+            setTimeout(() => {
+                document.body.removeChild(downloadLink);
+                URL.revokeObjectURL(blobUrl);
+            }, 1000);
+
+            showToast('Fail PDF Penyata Kewangan berjaya dimuat turun!');
+        } else {
+            window.print();
+        }
+    } catch (err) {
+        console.error(err);
+        window.print();
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalHTML;
+        }
+    }
+}
 
         function showToast(msg, iconClass = 'fa-circle-check text-emerald-400') {
             const banner = document.getElementById('toastBanner');
