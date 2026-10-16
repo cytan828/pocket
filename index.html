@@ -3224,6 +3224,22 @@ function doGet(e) {
                 pnlClone.style.padding = '0px';
                 pnlClone.style.border = 'none';
 
+                // --- MODIFIKASI KHUSUS PDF: Hapus warna hijau dan samakan border dengan Jumlah Aset ---
+const pdfFinalBanner = pnlClone.querySelector('#pnlFinalBanner');
+if (pdfFinalBanner) {
+    pdfFinalBanner.className = 'border-y-2 border-slate-900 py-2 px-3 flex justify-between items-center bg-slate-50 rounded-xl';
+    
+    const label = pdfFinalBanner.querySelector('#pnlFinalLabel');
+    if (label) label.className = 'font-extrabold text-xs text-slate-950 block';
+    
+    const subLabel = pdfFinalBanner.querySelector('span.text-xs');
+    if (subLabel) subLabel.className = 'text-[11px] text-slate-500';
+    
+    const netProfit = pdfFinalBanner.querySelector('#pnlNetProfit');
+    if (netProfit) netProfit.className = 'font-extrabold text-sm text-slate-950';
+}
+// ----------------------------------------------------------------------------------
+
                 const bsClone = bsEl.cloneNode(true);
                 bsClone.querySelectorAll('.no-print').forEach(el => el.remove());
                 bsClone.style.margin = '0';
