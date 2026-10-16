@@ -3,7 +3,7 @@
       "target": {
         "namespace": "android_app",
         "package_name": "io.github.cytan828.twa",
-        "sha256_cert_fingerprints": ["9C:F1:92:44:7C:8F:F7:E5:EE:F4:B8:71:30:38:CD:22:23:F0:0E:71:D2:70:FB:8C:CB:4B:35:76:3E:05:7D:44"]
+        "sha256_cert_fingerprints": ["B7:48:DE:30:9D:59:7C:56:A4:B9:4E:56:DC:E0:1F:2E:D2:98:EB:4B:AF:42:6C:EB:E2:97:7E:D4:A3:5C:5A:8C"]
       }
     }]
 
