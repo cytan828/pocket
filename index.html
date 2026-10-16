@@ -532,7 +532,7 @@
                                 </div>
                             </div>
                             <div class="border-y-2 border-slate-900 py-2 px-3 flex justify-between items-center bg-slate-50 rounded-xl mt-3">
-                                <span class="font-extrabold text-xs text-slate-950">JUMLAH EKUITI PEMILIK</span>
+                                <span class="font-extrabold text-xs text-slate-950">JUMLAH LIABILITI DAN EKUITI PEMILIK</span>
                                 <span id="bsTotalEquityFooter" class="font-extrabold text-sm text-slate-950">RM 0.00</span>
                             </div>
                         </div>
@@ -1728,7 +1728,7 @@
             setBS('bsNetProfit', stats.netProfit);
             document.getElementById('bsDrawings').textContent = `(${formatMoney(stats.ownerDrawings)})`;
             setBS('bsCarriedForward', stats.carriedForward);
-            setBS('bsTotalEquityFooter', stats.totalEquity);
+            setBS('bsTotalLiabilitiesAndEquity', stats.totalLiabilitiesAndEquity);
 
             const isBalanced = Math.abs(stats.totalAssets - stats.totalLiabilitiesAndEquity) < 0.01;
             document.getElementById('bsCheckAmount').textContent = isBalanced
