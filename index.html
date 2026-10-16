@@ -2980,7 +2980,7 @@ function doGet(e) {
                 if (typeof html2pdf !== 'undefined') {
                     const pdfBlob = await html2pdf()
                         .set({
-                            margin: [4, 8, 8, 8],
+                            margin: [4, 4, 4, 4],
                             filename: filename,
                             image: { type: 'jpeg', quality: 0.98 },
                             html2canvas: { 
