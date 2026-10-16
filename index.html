@@ -148,7 +148,7 @@
                         <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/60">
                             <div class="flex items-center gap-2 text-slate-500 text-xs font-bold mb-1">
                                 <i class="fa-solid fa-building-columns text-blue-600"></i>
-                                <span>Bank / QR Pay</span>
+                                <span>Bank / DuitNow QR</span>
                             </div>
                             <p id="homeBankBalance" class="font-extrabold text-base text-slate-800">RM 0.00</p>
                         </div>
@@ -169,7 +169,7 @@
                             <span id="homeTotalSales" class="text-sm font-extrabold text-emerald-700 mt-0.5 block">RM 0</span>
                         </div>
                         <div class="bg-rose-50/70 border border-rose-200/70 rounded-2xl p-3">
-                            <span class="text-[11px] font-bold text-rose-800 block">Jumlah Kos</span>
+                            <span class="text-[11px] font-bold text-rose-800 block">Jumlah Belanja</span>
                             <span id="homeTotalExpenses" class="text-sm font-extrabold text-rose-700 mt-0.5 block">RM 0</span>
                         </div>
                         <div id="homeProfitCard" class="bg-blue-50 border border-blue-200 rounded-2xl p-3">
@@ -286,7 +286,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-2 pt-1">
+                    <div class="grid grid-cols-2 gap-2 pt-1">
                         <button id="downloadPdfBtn" onclick="downloadYearEndPDF()" class="bg-white text-emerald-900 font-extrabold text-xs py-3 px-3 rounded-2xl shadow flex items-center justify-center gap-1.5 active-scale">
                             <i class="fa-solid fa-file-pdf text-rose-600 text-sm"></i>
                             <span>Simpan PDF</span>
@@ -294,10 +294,6 @@
                         <button onclick="downloadCSVForSheets()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs py-3 px-3 rounded-2xl border border-emerald-400 flex items-center justify-center gap-1.5 active-scale">
                             <i class="fa-solid fa-table text-sm"></i>
                             <span>Fail Excel/CSV</span>
-                        </button>
-                        <button onclick="copySummaryToClipboard()" class="bg-emerald-700 hover:bg-emerald-600 text-white font-extrabold text-xs py-3 px-3 rounded-2xl border border-emerald-500 flex items-center justify-center gap-1.5 active-scale">
-                            <i class="fa-solid fa-share-nodes text-sm"></i>
-                            <span>WhatsApp</span>
                         </button>
                     </div>
                 </div>
