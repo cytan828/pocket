@@ -555,7 +555,7 @@
                         <!-- Verification Badge (Hidden in Print/PDF to guarantee 1-page fit) -->
                         <div class="no-print bg-slate-900 text-white p-3.5 rounded-2xl flex items-center justify-between text-xs">
                             <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+                                <i id="bsCheckIcon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
                                 <div>
                                     <span class="font-extrabold block">SEMAKAN IMBANGAN AKAUN</span>
                                     <span class="text-slate-300 text-[11px]">Jumlah Aset sama dengan Liabiliti + Ekuiti</span>
@@ -1708,10 +1708,28 @@
             setBS('bsCarriedForward', stats.carriedForward);
             setBS('bsTotalLiabilitiesAndEquity', stats.totalLiabilitiesAndEquity);
 
-            const isBalanced = Boolean(stats.isBalanced);
-            document.getElementById('bsCheckAmount').textContent = isBalanced
-                ? `SEIMBANG (${formatMoney(stats.totalAssets)})`
-                : formatMoney(stats.totalLiabilitiesAndEquity);
+const isBalanced = Boolean(stats.isBalanced);
+const checkAmountEl = document.getElementById('bsCheckAmount');
+const checkIconEl = document.getElementById('bsCheckIcon');
+
+if (isBalanced) {
+    if (checkAmountEl) {
+        checkAmountEl.textContent = `SEIMBANG (${formatMoney(stats.totalAssets)})`;
+        checkAmountEl.className = 'font-extrabold text-sm text-emerald-400';
+    }
+    if (checkIconEl) {
+        checkIconEl.className = 'fa-solid fa-circle-check text-emerald-400 text-base';
+    }
+} else {
+    const diff = Math.abs((Number(stats.totalAssets) || 0) - (Number(stats.totalLiabilitiesAndEquity) || 0));
+    if (checkAmountEl) {
+        checkAmountEl.textContent = `BEZA: ${formatMoney(diff)}`;
+        checkAmountEl.className = 'font-extrabold text-sm text-rose-400';
+    }
+    if (checkIconEl) {
+        checkIconEl.className = 'fa-solid fa-circle-xmark text-rose-500 text-base';
+    }
+}
         }
 
         let currentCreditType = 'CREDIT_SALE';
