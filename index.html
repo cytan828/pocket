@@ -53,7 +53,7 @@
 </head>
 <body class="text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
 
-    <div class="max-w-md mx-auto min-h-screen bg-slate-50 flex flex-col shadow-2xl relative print-container border-x border-slate-200">
+    <div class="w-full max-w-7xl mx-auto min-h-screen bg-slate-50 flex flex-col shadow-2xl relative print-container border-x border-slate-200">
         
         <!-- Header (Only Sheets & Install Buttons; Settings opened by tapping Biz Name) -->
         <header class="bg-emerald-700 text-white pt-5 pb-4 px-5 sticky top-0 z-30 shadow-md no-print">
@@ -93,102 +93,109 @@
 
         <main class="flex-1 pb-28 px-4 pt-4 overflow-y-auto no-scrollbar">
 
-            <!-- VIEW 1: HOME -->
-            <section id="view-home" class="space-y-5">
-                <div onclick="openSheetsModal()" class="hidden cursor-pointer bg-white border border-emerald-200 rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-xs hover:bg-emerald-50/40 transition">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 text-lg">
-                            <i class="fa-solid fa-file-excel"></i>
-                        </div>
-                        <div class="text-xs">
-                            <span id="homeSheetBannerTitle" class="font-extrabold text-slate-900 block">Simpan ke Google Sheets Anda</span>
-                            <span id="homeSheetBannerSub" class="text-slate-500">Tekan sini untuk sambung Google Sheet atau muat turun fail Excel/CSV</span>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
+<!-- VIEW 1: HOME -->
+<section id="view-home" class="space-y-5">
+    <div onclick="openSheetsModal()" class="hidden cursor-pointer bg-white border border-emerald-200 rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-xs hover:bg-emerald-50/40 transition">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 text-lg">
+                <i class="fa-solid fa-file-excel"></i>
+            </div>
+            <div class="text-xs">
+                <span id="homeSheetBannerTitle" class="font-extrabold text-slate-900 block">Simpan ke Google Sheets Anda</span>
+                <span id="homeSheetBannerSub" class="text-slate-500">Tekan sini untuk sambung Google Sheet atau muat turun fail Excel/CSV</span>
+            </div>
+        </div>
+        <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
+    </div>
+
+    <!-- MAIN BUTTONS: Stays 2 columns on phone, expands on PC -->
+    <div class="grid grid-cols-2 gap-3.5 md:gap-5">
+        <button onclick="openRecordModal('IN')" class="active-scale bg-gradient-to-b from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-5 rounded-3xl shadow-lg shadow-emerald-600/20 flex flex-col items-center justify-center text-center border-b-4 border-emerald-800 transition">
+            <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl mb-2.5 shadow-inner">
+                <i class="fa-solid fa-plus"></i>
+            </div>
+            <span class="font-extrabold text-xl tracking-tight">DUIT MASUK</span>
+            <span class="text-xs text-emerald-100 font-medium mt-1">Jualan & Hasil</span>
+        </button>
+
+        <button onclick="openRecordModal('OUT')" class="active-scale bg-gradient-to-b from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white p-5 rounded-3xl shadow-lg shadow-rose-600/20 flex flex-col items-center justify-center text-center border-b-4 border-rose-800 transition">
+            <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl mb-2.5 shadow-inner">
+                <i class="fa-solid fa-minus"></i>
+            </div>
+            <span class="font-extrabold text-xl tracking-tight">DUIT KELUAR</span>
+            <span class="text-xs text-rose-100 font-medium mt-1">Belanja, Stok & Bil</span>
+        </button>
+    </div>
+
+    <!-- RESPONSIVE GRID: 1 column on phone, 2 side-by-side columns on tablet/PC -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- CARD 1: Jumlah Duit Bisnes -->
+        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200/80 space-y-4 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Jumlah Duit Bisnes Sekarang</h2>
+                    <p id="homeTotalMoney" class="text-3xl font-extrabold text-slate-900 mt-0.5">RM 0.00</p>
                 </div>
-
-                <div class="grid grid-cols-2 gap-3.5">
-                    <button onclick="openRecordModal('IN')" class="active-scale bg-gradient-to-b from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-5 rounded-3xl shadow-lg shadow-emerald-600/20 flex flex-col items-center justify-center text-center border-b-4 border-emerald-800 transition">
-                        <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl mb-2.5 shadow-inner">
-                            <i class="fa-solid fa-plus"></i>
-                        </div>
-                        <span class="font-extrabold text-xl tracking-tight">DUIT MASUK</span>
-                        <span class="text-xs text-emerald-100 font-medium mt-1">Jualan & Hasil</span>
-                    </button>
-
-                    <button onclick="openRecordModal('OUT')" class="active-scale bg-gradient-to-b from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white p-5 rounded-3xl shadow-lg shadow-rose-600/20 flex flex-col items-center justify-center text-center border-b-4 border-rose-800 transition">
-                        <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl mb-2.5 shadow-inner">
-                            <i class="fa-solid fa-minus"></i>
-                        </div>
-                        <span class="font-extrabold text-xl tracking-tight">DUIT KELUAR</span>
-                        <span class="text-xs text-rose-100 font-medium mt-1">Belanja, Stok & Bil</span>
-                    </button>
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl shrink-0">
+                    <i class="fa-solid fa-wallet"></i>
                 </div>
+            </div>
 
-                <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200/80 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Jumlah Duit Bisnes Sekarang</h2>
-                            <p id="homeTotalMoney" class="text-3xl font-extrabold text-slate-900 mt-0.5">RM 0.00</p>
-                        </div>
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl">
-                            <i class="fa-solid fa-wallet"></i>
-                        </div>
+            <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/60">
+                    <div class="flex items-center gap-2 text-slate-500 text-xs font-bold mb-1">
+                        <i class="fa-solid fa-money-bill-wave text-emerald-600"></i>
+                        <span>Tunai di Tangan</span>
                     </div>
-
-                    <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
-                        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/60">
-                            <div class="flex items-center gap-2 text-slate-500 text-xs font-bold mb-1">
-                                <i class="fa-solid fa-money-bill-wave text-emerald-600"></i>
-                                <span>Tunai di Tangan</span>
-                            </div>
-                            <p id="homeCashBalance" class="font-extrabold text-base text-slate-800">RM 0.00</p>
-                        </div>
-                        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/60">
-                            <div class="flex items-center gap-2 text-slate-500 text-xs font-bold mb-1">
-                                <i class="fa-solid fa-building-columns text-blue-600"></i>
-                                <span>Bank / DuitNow QR</span>
-                            </div>
-                            <p id="homeBankBalance" class="font-extrabold text-base text-slate-800">RM 0.00</p>
-                        </div>
-                    </div>
+                    <p id="homeCashBalance" class="font-extrabold text-base text-slate-800">RM 0.00</p>
                 </div>
-
-                <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200/80 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Untung Bisnes Tahun <span class="yearLabel">2026</span></h2>
-                        <button onclick="switchTab('reports')" class="text-xs font-bold text-emerald-700 hover:underline flex items-center gap-1">
-                            Lihat Penyata Penuh <i class="fa-solid fa-arrow-right"></i>
-                        </button>
+                <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/60">
+                    <div class="flex items-center gap-2 text-slate-500 text-xs font-bold mb-1">
+                        <i class="fa-solid fa-building-columns text-blue-600"></i>
+                        <span>Bank / DuitNow QR</span>
                     </div>
-
-                    <div class="grid grid-cols-3 gap-2 pt-1">
-                        <div class="bg-emerald-50/70 border border-emerald-200/70 rounded-2xl p-3">
-                            <span class="text-[11px] font-bold text-emerald-800 block">Jumlah Jualan</span>
-                            <span id="homeTotalSales" class="text-sm font-extrabold text-emerald-700 mt-0.5 block">RM 0</span>
-                        </div>
-                        <div class="bg-rose-50/70 border border-rose-200/70 rounded-2xl p-3">
-                            <span class="text-[11px] font-bold text-rose-800 block">Jumlah Belanja</span>
-                            <span id="homeTotalExpenses" class="text-sm font-extrabold text-rose-700 mt-0.5 block">RM 0</span>
-                        </div>
-                        <div id="homeProfitCard" class="bg-blue-50 border border-blue-200 rounded-2xl p-3">
-                            <span class="text-[11px] font-bold text-blue-900 block">Untung Bersih</span>
-                            <span id="homeNetProfit" class="text-sm font-extrabold text-blue-700 mt-0.5 block">RM 0</span>
-                        </div>
-                    </div>
+                    <p id="homeBankBalance" class="font-extrabold text-base text-slate-800">RM 0.00</p>
                 </div>
+            </div>
+        </div>
 
-                <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200/80">
-                    <div class="flex items-center justify-between mb-3">
-                        <h2 class="text-sm font-extrabold text-slate-800">Rekod Terkini</h2>
-                        <button onclick="switchTab('history')" class="text-xs font-bold text-emerald-700 hover:underline">
-                            Lihat Semua (<span id="homeTxCount">0</span>)
-                        </button>
-                    </div>
-                    <div id="homeRecentList" class="space-y-2.5"></div>
+        <!-- CARD 2: Untung Bisnes -->
+        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200/80 space-y-3 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Untung Bisnes Tahun <span class="yearLabel">2026</span></h2>
+                <button onclick="switchTab('reports')" class="text-xs font-bold text-emerald-700 hover:underline flex items-center gap-1 shrink-0">
+                    Lihat Penyata <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 pt-1 h-full">
+                <div class="bg-emerald-50/70 border border-emerald-200/70 rounded-2xl p-3 flex flex-col justify-center">
+                    <span class="text-[11px] font-bold text-emerald-800 block">Jumlah Jualan</span>
+                    <span id="homeTotalSales" class="text-sm font-extrabold text-emerald-700 mt-0.5 block">RM 0</span>
                 </div>
-            </section>
+                <div class="bg-rose-50/70 border border-rose-200/70 rounded-2xl p-3 flex flex-col justify-center">
+                    <span class="text-[11px] font-bold text-rose-800 block">Jumlah Belanja</span>
+                    <span id="homeTotalExpenses" class="text-sm font-extrabold text-rose-700 mt-0.5 block">RM 0</span>
+                </div>
+                <div id="homeProfitCard" class="bg-blue-50 border border-blue-200 rounded-2xl p-3 flex flex-col justify-center">
+                    <span class="text-[11px] font-bold text-blue-900 block">Untung Bersih</span>
+                    <span id="homeNetProfit" class="text-sm font-extrabold text-blue-700 mt-0.5 block">RM 0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECENT RECORDS: Full width at the bottom -->
+    <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200/80">
+        <div class="flex items-center justify-between mb-3">
+            <h2 class="text-sm font-extrabold text-slate-800">Rekod Terkini</h2>
+            <button onclick="switchTab('history')" class="text-xs font-bold text-emerald-700 hover:underline">
+                Lihat Semua (<span id="homeTxCount">0</span>)
+            </button>
+        </div>
+        <div id="homeRecentList" class="space-y-2.5"></div>
+    </div>
+</section>
 
             <!-- VIEW 2: HISTORY LOG -->
             <section id="view-history" class="space-y-4 hidden">
@@ -566,8 +573,8 @@
             </section>
         </main>
 <!-- Bottom Navigation Bar -->
-        <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 max-w-md w-full bg-white/95 backdrop-blur-md border-t border-slate-200 py-2 px-6 flex justify-around items-center z-30 no-print shadow-lg">
-            <button id="nav-home" onclick="switchTab('home')" class="flex flex-col items-center py-1.5 px-4 rounded-2xl text-emerald-700 font-extrabold transition relative">
+        <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-7xl bg-white/95 backdrop-blur-md border-t border-slate-200 py-2 px-6 flex justify-around items-center z-30 no-print shadow-lg">
+        <button id="nav-home" onclick="switchTab('home')" class="flex flex-col items-center py-1.5 px-4 rounded-2xl text-emerald-700 font-extrabold transition relative">
                 <i class="fa-solid fa-house text-lg"></i>
                 <span class="text-[10px] mt-1">Utama</span>
             </button>
